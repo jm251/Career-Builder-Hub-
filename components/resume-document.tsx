@@ -17,9 +17,10 @@ export const resumeDocumentStyles = `
     --resume-ink: #131313;
     --resume-muted: #5f6470;
     --resume-line: rgba(19, 19, 19, 0.12);
+    --resume-page-width: 210mm;
     background: var(--resume-paper);
     color: var(--resume-ink);
-    width: min(100%, 8.5in);
+    width: min(100%, var(--resume-page-width));
     margin: 0 auto;
     font-size: 16px;
     line-height: 1.5;
