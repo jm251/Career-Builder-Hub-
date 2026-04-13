@@ -251,7 +251,8 @@ textarea {
 }
 
 .hero-grid {
-  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+  grid-template-columns: minmax(0, 0.94fr) minmax(430px, 1.06fr);
+  gap: 28px;
   padding: 28px 0 38px;
   align-items: start;
 }
@@ -331,6 +332,11 @@ textarea {
   border-radius: 24px;
   background: linear-gradient(180deg, rgba(15, 23, 42, 0.06), rgba(255, 255, 255, 0.7));
   overflow: hidden;
+}
+
+.hero-card .resume-preview-frame {
+  --resume-preview-scale: 0.64;
+  padding: 12px;
 }
 
 .resume-preview-stage {
@@ -693,6 +699,10 @@ textarea {
   .resume-preview-frame {
     --resume-preview-scale: 0.5;
   }
+
+  .hero-card .resume-preview-frame {
+    --resume-preview-scale: 0.56;
+  }
 }
 
 @media (max-width: 820px) {
@@ -791,6 +801,10 @@ textarea {
   .resume-preview-frame {
     --resume-preview-scale: 0.42;
     padding: 10px;
+  }
+
+  .hero-card .resume-preview-frame {
+    --resume-preview-scale: 0.44;
   }
 }
 
