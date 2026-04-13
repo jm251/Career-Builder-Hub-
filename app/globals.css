@@ -347,8 +347,8 @@ textarea {
 }
 
 .resume-preview-document {
-  width: 210mm;
-  max-width: none;
+  width: 210mm !important;
+  max-width: none !important;
   transform: scale(var(--resume-preview-scale));
   transform-origin: top left;
 }
