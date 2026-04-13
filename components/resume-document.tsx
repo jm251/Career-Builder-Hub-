@@ -21,6 +21,8 @@ export const resumeDocumentStyles = `
     color: var(--resume-ink);
     width: min(100%, 8.5in);
     margin: 0 auto;
+    font-size: 16px;
+    line-height: 1.5;
     box-shadow: 0 18px 45px rgba(17, 24, 39, 0.12);
     border: 1px solid rgba(19, 19, 19, 0.08);
     overflow: hidden;
@@ -41,14 +43,15 @@ export const resumeDocumentStyles = `
   }
   .resume-document__name {
     margin: 0;
-    font-size: clamp(2rem, 4vw, 2.8rem);
-    line-height: 0.96;
+    font-size: clamp(2rem, 3vw + 1rem, 2.6rem);
+    line-height: 1;
     letter-spacing: -0.05em;
   }
   .resume-document__summary {
     color: var(--resume-muted);
     max-width: 65ch;
-    font-size: 0.98rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
   }
   .resume-document__summary p {
     margin: 0;
@@ -61,7 +64,8 @@ export const resumeDocumentStyles = `
     margin: 0;
     list-style: none;
     color: var(--resume-muted);
-    font-size: 0.92rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
   }
   .resume-document__contacts a {
     color: inherit;
@@ -83,7 +87,8 @@ export const resumeDocumentStyles = `
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.16em;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
+    line-height: 1.4;
     color: var(--resume-accent);
   }
   .resume-document__entry {
@@ -100,20 +105,22 @@ export const resumeDocumentStyles = `
   .resume-document__entry-title {
     margin: 0;
     font-size: 1rem;
-    line-height: 1.2;
+    line-height: 1.3;
   }
   .resume-document__entry-date {
     color: var(--resume-muted);
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     white-space: nowrap;
   }
   .resume-document__entry-meta {
     color: var(--resume-muted);
-    font-size: 0.9rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
   }
   .resume-document__rich {
     color: var(--resume-muted);
-    font-size: 0.95rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
   }
   .resume-document__rich p,
   .resume-document__rich ul {
@@ -161,7 +168,7 @@ export const resumeDocumentStyles = `
     border-color: rgba(255, 255, 255, 0.3);
   }
   .resume-document--modern .resume-document__section-title {
-    font-size: 0.78rem;
+    font-size: 0.75rem;
   }
   .resume-document--creative .resume-document__inner {
     font-family: "Space Grotesk", "Segoe UI", sans-serif;
@@ -220,7 +227,7 @@ export const resumeDocumentStyles = `
       max-width: none;
     }
     .resume-document__contacts {
-      font-size: 0.86rem;
+      font-size: 0.8125rem;
     }
     .resume-document--modern .resume-document__header {
       padding: 20px;
