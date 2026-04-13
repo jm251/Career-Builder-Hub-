@@ -48,12 +48,15 @@ export default async function HomePage() {
 
         <div className="hero-card">
           <div className="resume-preview-frame">
-            <ResumeDocument
-              resumeData={sample}
-              template="professional"
-              themeSettings={sampleThemeSettings}
-              title="Avery Lane Resume"
-            />
+            <div className="resume-preview-stage">
+              <ResumeDocument
+                className="resume-preview-document"
+                resumeData={sample}
+                template="professional"
+                themeSettings={sampleThemeSettings}
+                title="Avery Lane Resume"
+              />
+            </div>
           </div>
         </div>
       </section>

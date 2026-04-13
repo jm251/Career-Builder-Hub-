@@ -30,12 +30,15 @@ export default function TemplatesPage() {
               <p className="eyebrow">{meta?.name}</p>
               <h2 className="section-title">{meta?.blurb}</h2>
               <div className="resume-preview-frame">
-                <ResumeDocument
-                  resumeData={sample}
-                  template={templateKey}
-                  themeSettings={sampleThemeSettings}
-                  title={`${meta?.name} preview`}
-                />
+                <div className="resume-preview-stage">
+                  <ResumeDocument
+                    className="resume-preview-document"
+                    resumeData={sample}
+                    template={templateKey}
+                    themeSettings={sampleThemeSettings}
+                    title={`${meta?.name} preview`}
+                  />
+                </div>
               </div>
             </article>
           );
