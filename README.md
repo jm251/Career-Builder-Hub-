@@ -1,90 +1,103 @@
-# resume-markdown
+# Career Builder Hub
 
-![Resume](https://raw.githubusercontent.com/mikepqr/resume-markdown/main/example/resume.png)
+Career Builder Hub is a browser-first career asset builder designed for Vercel deployment.
+It turns the original `resume-markdown` idea into a hosted product with:
 
-Write your resume in
-[Markdown](https://raw.githubusercontent.com/mikepqr/resume-markdown/main/src/resume_markdown/resume.md),
-style it with [CSS](src/resume_markdown/resume.css), output to [`resume.html`](example/resume.html) and
-[`resume.pdf`](example/resume.pdf).
+- Public builders for resume drafts, GitHub profile READMEs, LinkedIn profile copy, and portfolio content kits
+- Guest generation in the browser, with sign-in required only for saved workspace history and resume publishing
+- OAuth sign-in with Google and GitHub
+- A shared workspace for saved career assets
+- Resume publishing with public resume URLs and PDF export
+- Resume form editing plus a full-document Markdown tab
+- Markdown import and canonical normalization for resume drafts
+- FastRouter-backed generation via its OpenAI-compatible Responses API, with OpenAI fallback and local mock outputs when no provider key is set
 
-## Prerequisites
+The legacy Python package remains in `src/resume_markdown/` as migration/reference material. It is not part of the Next.js runtime.
 
- - Python ≥ 3.9 or `uv`
- - Optional, required for PDF output: Google Chrome or Chromium
+## Stack
 
-## Installation
+- Next.js 16 App Router
+- React 19
+- Prisma + PostgreSQL
+- Auth.js + Prisma adapter
+- FastRouter or OpenAI Responses API
+- Puppeteer + `@sparticuz/chromium` for PDF generation
+- Vitest + Playwright
 
-### Using uv
+## Local development
 
-Run directly without installing:
+1. Install dependencies:
 
-```bash
-uvx resume-markdown
-```
-
-Or install once:
-
-```bash
-uv tool install resume-markdown
-```
-
-### Using pip
-
-```bash
-pip install resume-markdown
-```
-
-## Usage
-
-### Quick start
-
- 1. Create template files in your current directory:
-
-    ```bash
-    resume-markdown init
-    # or with uvx: uvx resume-markdown init
-    ```
-
-    This creates [`resume.md`](src/resume_markdown/resume.md) and [`resume.css`](src/resume_markdown/resume.css) in the current directory.
-
- 2. Edit your copy of `resume.md` with your resume content (the placeholder text is taken
-    with thanks from the [JSON Resume Project](https://jsonresume.org/themes/))
-
- 3. Build HTML and PDF output:
-
-    ```bash
-    resume-markdown build
-    # or with uvx: uvx resume-markdown build
-    ```
-
-### Build options
-
- - Use `--no-html` or `--no-pdf` to disable HTML or PDF output:
    ```bash
-   resume-markdown build --no-pdf
+   pnpm install
    ```
 
- - Use `--chrome-path=/path/to/chrome` if the tool cannot find your Chrome
-   or Chromium executable (needed for PDF output)
+2. Copy environment variables:
+
    ```bash
-   resume-markdown build --chrome-path=/path/to/chrome
+   cp .env.example .env.local
    ```
 
- - Specify a custom input file:
+3. Set at least:
+
+   - `DATABASE_URL`
+   - `AUTH_SECRET`
+   - `AUTH_URL`
+   - `NEXT_PUBLIC_APP_URL`
+   - `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`
+   - `GITHUB_ID` / `GITHUB_SECRET`
+   - `FASTROUTER_API_KEY` or `OPENAI_API_KEY`
+
+   Optional:
+
+   - `FASTROUTER_BASE_URL`
+   - `FASTROUTER_MODEL`
+   - `OPENAI_MODEL`
+
+4. Generate and apply your Prisma schema:
+
    ```bash
-   resume-markdown build myresume.md
+   pnpm db:generate
+   pnpm db:push
    ```
 
-## Customization
+   If you are upgrading from the earlier resume-only app and already have rows in the legacy
+   `Resume` table, run:
 
-Edit [`resume.css`](src/resume_markdown/resume.css) to change the appearance of your resume. The
-default style is extremely generic, which is perhaps what you want in a resume,
-but CSS gives you a lot of flexibility. See, e.g. [The Tech Resume
-Inside-Out](https://www.thetechinterview.com/) for good advice about what a
-resume should look like (and what it should say).
+   ```bash
+   pnpm db:migrate:resumes
+   ```
 
-Change the appearance of the PDF version (without affecting the HTML version) by
-adding rules under the `@media print` CSS selector.
+5. Start the app:
 
-Change the margins and paper size of the PDF version by editing the [`@page` CSS
-rule](https://developer.mozilla.org/en-US/docs/Web/CSS/%40page/size).
+   ```bash
+   pnpm dev
+   ```
+
+## Verification
+
+```bash
+pnpm test
+pnpm test:e2e
+pnpm build
+```
+
+## Vercel deployment
+
+1. Create a PostgreSQL database, preferably Neon.
+2. Add the environment variables from `.env.example` in Vercel.
+3. Configure Google and GitHub OAuth callback URLs to point at:
+
+   - `https://your-domain.com/api/auth/callback/google`
+   - `https://your-domain.com/api/auth/callback/github`
+
+4. Deploy the repo as a standard Next.js project on Vercel.
+5. If you want live AI generation in production, set `FASTROUTER_API_KEY` and optionally
+   `FASTROUTER_MODEL`. The app prefers FastRouter automatically when that key is present.
+   `OPENAI_API_KEY` remains supported as a fallback provider.
+
+## Legacy reference
+
+The original CLI implementation still lives under `src/resume_markdown/`. Keep it only for migration/reference work unless you explicitly want to maintain the Python package separately.
+
+# Career-Builder-Hub-

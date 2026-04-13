@@ -1,99 +1,34 @@
-name: build
+name: Web Build
 
 on:
-    workflow_dispatch:
-    pull_request:
-    push:
-        branches: [main]
-        paths-ignore:
-            - 'example/**'
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
 
 jobs:
   build:
-    if: github.repository == 'mikepqr/resume-markdown'
-    runs-on: ${{ matrix.os }}
-    strategy:
-        fail-fast: false
-        matrix:
-            # os: [ubuntu-latest, macos-latest, windows-latest]
-            os: [ubuntu-latest, windows-latest]
-    steps:
-    - name: Check out repo
-      uses: actions/checkout@v4
-
-    - name: Set up uv
-      uses: astral-sh/setup-uv@v5
-
-    - name: Install package
-      run: uv tool install .
-
-    - name: Initialize resume templates
-      run: resume-markdown init
-
-    - name: Install mscorefonts (Linux)
-      if: runner.os == 'Linux'
-      run: |
-        echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
-        sudo apt-get update
-        sudo apt-get install -y --no-install-recommends ttf-mscorefonts-installer fontconfig
-        sudo fc-cache -f -v
-
-    - name: Make resume
-      run: resume-markdown --debug build
-
-    - name: Rename output (Unix)
-      if: runner.os != 'Windows'
-      shell: bash
-      run: |
-          mv resume.pdf resume_${{ runner.os }}.pdf
-          mv resume.html resume_${{ runner.os }}.html
-
-    - name: Rename output (Windows)
-      if: runner.os == 'Windows'
-      shell: pwsh
-      run: |
-          Move-Item resume.pdf resume_Windows.pdf
-          Move-Item resume.html resume_Windows.html
-
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-          name: resume-${{ runner.os }}
-          path: |
-              *.pdf
-              *.html
-
-  update-examples:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: build
     steps:
-    - name: Check out repo
-      uses: actions/checkout@v4
+      - name: Check out repo
+        uses: actions/checkout@v4
 
-    - name: Install ImageMagick
-      run: sudo apt-get update && sudo apt-get install -y imagemagick
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.13.1
 
-    - name: Download Windows artifacts
-      uses: actions/download-artifact@v4
-      with:
-          name: resume-Windows
-          path: artifacts
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
 
-    - name: Update example files
-      run: |
-          mv artifacts/resume_Windows.pdf example/resume.pdf
-          mv artifacts/resume_Windows.html example/resume.html
-          convert -density 300 example/resume.pdf[0] -background white -alpha remove \
-            -crop 2550x1176+0+0 +repage \
-            \( -size 2550x196 gradient:none-white \) \
-            -gravity South -composite \
-            -resize 1300x600 example/resume.png
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-    - name: Commit changes
-      run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add example/resume.pdf example/resume.html example/resume.png
-          git diff --staged --quiet || git commit -m "Update example outputs"
-          git push
+      - name: Run unit tests
+        run: pnpm test
+
+      - name: Build application
+        run: pnpm build
