@@ -194,6 +194,43 @@ export const resumeDocumentStyles = `
       justify-content: flex-start;
     }
   }
+  @media (max-width: 540px) {
+    .resume-document {
+      border-radius: 18px;
+    }
+    .resume-document__inner {
+      padding: 18px;
+    }
+    .resume-document__header {
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .resume-document__section {
+      gap: 14px;
+      padding-top: 16px;
+    }
+    .resume-document__entry-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .resume-document__entry-date {
+      white-space: normal;
+    }
+    .resume-document__summary {
+      max-width: none;
+    }
+    .resume-document__contacts {
+      font-size: 0.86rem;
+    }
+    .resume-document--modern .resume-document__header {
+      padding: 20px;
+      border-radius: 20px;
+    }
+    .resume-document--creative .resume-document__section {
+      padding: 14px 14px 0;
+      border-radius: 18px;
+    }
+  }
   @media print {
     body {
       margin: 0;

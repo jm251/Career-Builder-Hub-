@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 
 import "./globals.css";
@@ -17,6 +17,11 @@ export const metadata: Metadata = {
   title: "Career Builder Hub",
   description:
     "A Vercel-ready career builder for resumes, GitHub profile READMEs, LinkedIn copy, portfolio kits, and hosted resume publishing.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

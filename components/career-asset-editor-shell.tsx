@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 
 type NonResumeAssetType = Exclude<CareerAssetType, "RESUME">;
 type NonResumeAssetRecord = CareerAssetRecord<NonResumeAssetType>;
+type MobilePane = "edit" | "output";
 
 function textToList(value: string) {
   return value
@@ -48,6 +49,7 @@ export function CareerAssetEditorShell({ asset }: { asset: NonResumeAssetRecord 
   const [title, setTitle] = useState(asset.title);
   const [inputData, setInputData] = useState(asset.inputData);
   const [outputData, setOutputData] = useState(asset.outputData);
+  const [mobilePane, setMobilePane] = useState<MobilePane>("edit");
   const [busy, setBusy] = useState<"idle" | "saving" | "generating">("idle");
   const [statusMessage, setStatusMessage] = useState("Ready");
 
@@ -69,6 +71,7 @@ export function CareerAssetEditorShell({ asset }: { asset: NonResumeAssetRecord 
       }
 
       setOutputData(payload.outputData);
+      setMobilePane("output");
       setStatusMessage("Generated new content.");
     } finally {
       setBusy("idle");
@@ -137,10 +140,31 @@ export function CareerAssetEditorShell({ asset }: { asset: NonResumeAssetRecord 
           <Save size={14} />
           {statusMessage}
         </div>
+
+        <div className="editor-toolbar__secondary mobile-only">
+          <div className="segmented-control" role="tablist" aria-label="Asset panes">
+            <button
+              className={cn(mobilePane === "edit" && "is-active")}
+              onClick={() => setMobilePane("edit")}
+              role="tab"
+              type="button"
+            >
+              Edit
+            </button>
+            <button
+              className={cn(mobilePane === "output" && "is-active")}
+              onClick={() => setMobilePane("output")}
+              role="tab"
+              type="button"
+            >
+              Output
+            </button>
+          </div>
+        </div>
       </section>
 
       <div className="editor-main">
-        <section className="editor-panel surface-card">
+        <section className={cn("editor-panel surface-card", mobilePane !== "edit" && "mobile-hidden")}>
           {asset.type === "GITHUB_README" ? (
             <GitHubReadmeFields
               value={inputData as GitHubReadmeInputData}
@@ -161,7 +185,7 @@ export function CareerAssetEditorShell({ asset }: { asset: NonResumeAssetRecord 
           ) : null}
         </section>
 
-        <section className="editor-preview surface-card">
+        <section className={cn("editor-preview surface-card", mobilePane !== "output" && "mobile-hidden")}>
           {asset.type === "GITHUB_README" ? (
             <GitHubReadmeOutput outputData={outputData as CareerAssetRecord<"GITHUB_README">["outputData"]} title={title} />
           ) : null}

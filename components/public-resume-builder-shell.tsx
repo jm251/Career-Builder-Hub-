@@ -15,6 +15,9 @@ import {
   type ResumeAssistantOutput,
 } from "@/lib/career-assets";
 import { createEmptyOutputData } from "@/lib/career-assets";
+import { cn } from "@/lib/utils";
+
+type MobilePane = "edit" | "output" | "preview";
 
 function textToList(value: string) {
   return value
@@ -47,6 +50,7 @@ export function PublicResumeBuilderShell({ isAuthenticated }: { isAuthenticated:
   });
   const [outputData, setOutputData] = useState<ResumeAssistantOutput>(createEmptyOutputData("RESUME"));
   const [busy, setBusy] = useState<"idle" | "generating" | "saving">("idle");
+  const [mobilePane, setMobilePane] = useState<MobilePane>("edit");
   const [statusMessage, setStatusMessage] = useState("Guest resume drafts stay in this browser.");
 
   useEffect(() => {
@@ -97,6 +101,7 @@ export function PublicResumeBuilderShell({ isAuthenticated }: { isAuthenticated:
 
       setInputData(payload.inputData);
       setOutputData(payload.outputData);
+      setMobilePane("output");
       setStatusMessage("Generated summary and bullet suggestions.");
     } finally {
       setBusy("idle");
@@ -165,10 +170,39 @@ export function PublicResumeBuilderShell({ isAuthenticated }: { isAuthenticated:
           <Save size={14} />
           {statusMessage}
         </div>
+
+        <div className="editor-toolbar__secondary mobile-only">
+          <div className="segmented-control" role="tablist" aria-label="Resume builder panes">
+            <button
+              className={cn(mobilePane === "edit" && "is-active")}
+              onClick={() => setMobilePane("edit")}
+              role="tab"
+              type="button"
+            >
+              Edit
+            </button>
+            <button
+              className={cn(mobilePane === "output" && "is-active")}
+              onClick={() => setMobilePane("output")}
+              role="tab"
+              type="button"
+            >
+              Output
+            </button>
+            <button
+              className={cn(mobilePane === "preview" && "is-active")}
+              onClick={() => setMobilePane("preview")}
+              role="tab"
+              type="button"
+            >
+              Preview
+            </button>
+          </div>
+        </div>
       </section>
 
       <div className="editor-main">
-        <section className="editor-panel surface-card">
+        <section className={cn("editor-panel surface-card", mobilePane !== "edit" && "mobile-hidden")}>
           <div className="form-stack">
             <div className="field-grid">
               <Field label="Full name" onChange={(next) => setInputData({ ...inputData, fullName: next })} value={inputData.fullName} />
@@ -186,25 +220,22 @@ export function PublicResumeBuilderShell({ isAuthenticated }: { isAuthenticated:
             <TextareaField label="Career goals" onChange={(next) => setInputData({ ...inputData, goals: next })} value={inputData.goals} />
             <TextareaField label="Extra context" onChange={(next) => setInputData({ ...inputData, extraContext: next })} value={inputData.extraContext} />
 
-            <div className="notice-card">
-              <div className="subsection__header">
-                <strong>Generated copy</strong>
-                <button className="ghost-button" onClick={() => void navigator.clipboard.writeText(`${outputData.professionalSummary}\n\n${outputData.experienceBullets.join("\n")}`)} type="button">
-                  <Copy size={14} />
-                  Copy
-                </button>
-              </div>
-              <p className="muted-copy">{outputData.professionalSummary}</p>
-              <ul>
-                {outputData.experienceBullets.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
+            <div className="desktop-only">
+              <ResumeAssistantOutputCard outputData={outputData} />
             </div>
           </div>
         </section>
 
-        <section className="editor-preview surface-card">
+        <section
+          className={cn(
+            "editor-panel surface-card mobile-only",
+            mobilePane !== "output" && "mobile-hidden",
+          )}
+        >
+          <ResumeAssistantOutputCard outputData={outputData} />
+        </section>
+
+        <section className={cn("editor-preview surface-card", mobilePane !== "preview" && "mobile-hidden")}>
           <div className="form-stack">
             <p className="eyebrow">Draft preview</p>
             <h2 className="section-title">{previewResume.title}</h2>
@@ -218,6 +249,34 @@ export function PublicResumeBuilderShell({ isAuthenticated }: { isAuthenticated:
         </section>
       </div>
     </main>
+  );
+}
+
+function ResumeAssistantOutputCard({ outputData }: { outputData: ResumeAssistantOutput }) {
+  return (
+    <div className="notice-card">
+      <div className="subsection__header">
+        <strong>Generated copy</strong>
+        <button
+          className="ghost-button"
+          onClick={() =>
+            void navigator.clipboard.writeText(
+              `${outputData.professionalSummary}\n\n${outputData.experienceBullets.join("\n")}`,
+            )
+          }
+          type="button"
+        >
+          <Copy size={14} />
+          Copy
+        </button>
+      </div>
+      <p className="muted-copy">{outputData.professionalSummary}</p>
+      <ul className="generated-list">
+        {outputData.experienceBullets.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

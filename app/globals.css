@@ -37,6 +37,15 @@ a {
   color: inherit;
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+svg {
+  flex-shrink: 0;
+}
+
 button,
 input,
 textarea {
@@ -45,6 +54,11 @@ textarea {
 
 button {
   cursor: pointer;
+}
+
+form {
+  margin: 0;
+  min-width: 0;
 }
 
 input,
@@ -77,8 +91,14 @@ textarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   gap: 16px;
   padding: 24px 0 8px;
+}
+
+.site-header > *,
+.app-header > * {
+  min-width: 0;
 }
 
 .brand {
@@ -116,6 +136,7 @@ textarea {
   margin: 0;
   font-family: var(--font-display);
   letter-spacing: -0.05em;
+  overflow-wrap: anywhere;
 }
 
 .hero-title {
@@ -132,6 +153,7 @@ textarea {
 .page-copy {
   color: var(--muted);
   line-height: 1.7;
+  overflow-wrap: anywhere;
 }
 
 .primary-button,
@@ -146,6 +168,10 @@ textarea {
   gap: 10px;
   align-items: center;
   justify-content: center;
+  max-width: 100%;
+  min-height: 44px;
+  text-align: center;
+  white-space: normal;
   transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
 }
 
@@ -224,6 +250,13 @@ textarea {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+}
+
+.page-actions > *,
+.auth-buttons > *,
+.resume-card__actions > *,
+.editor-toolbar__actions > * {
+  min-width: 0;
 }
 
 .hero-card,
@@ -343,6 +376,7 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 14px;
 }
 
@@ -359,6 +393,7 @@ textarea {
 .editor-preview {
   border-radius: 28px;
   padding: 20px;
+  min-width: 0;
 }
 
 .editor-nav {
@@ -383,12 +418,14 @@ textarea {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
   border-radius: 999px;
   padding: 0.72rem 0.92rem;
   background: rgba(255, 255, 255, 0.84);
   border: 1px solid rgba(21, 24, 31, 0.08);
   color: var(--muted);
   font-size: 0.92rem;
+  overflow-wrap: anywhere;
 }
 
 .status-pill--danger,
@@ -401,6 +438,7 @@ textarea {
 .editor-workspace {
   display: grid;
   gap: 18px;
+  min-width: 0;
 }
 
 .editor-toolbar__primary {
@@ -411,14 +449,26 @@ textarea {
   gap: 16px;
 }
 
+.editor-toolbar {
+  display: grid;
+  gap: 14px;
+}
+
+.editor-toolbar__primary > .field {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
 .editor-main {
   grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
   align-items: start;
+  min-width: 0;
 }
 
 .editor-preview__canvas {
   max-height: calc(100vh - 220px);
   overflow: auto;
+  min-width: 0;
   padding: 10px;
   border-radius: 24px;
   background: linear-gradient(180deg, rgba(15, 23, 42, 0.06), rgba(255, 255, 255, 0.8));
@@ -462,12 +512,14 @@ textarea {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
+  min-width: 0;
 }
 
 .editor-section,
 .item-card {
   display: grid;
   gap: 14px;
+  min-width: 0;
 }
 
 .item-card {
@@ -488,6 +540,7 @@ textarea {
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.95rem;
   line-height: 1.6;
+  max-width: 100%;
 }
 
 .generated-output {
@@ -508,6 +561,13 @@ textarea {
   min-height: 240px;
 }
 
+.generated-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+}
+
 .public-resume-page__hero,
 .templates-page__hero {
   display: grid;
@@ -517,6 +577,7 @@ textarea {
 
 .public-resume-page__canvas {
   margin-top: 18px;
+  min-width: 0;
 }
 
 .segmented-control {
@@ -545,13 +606,17 @@ textarea {
   display: none;
 }
 
+.desktop-only {
+  display: block;
+}
+
 .empty-state {
   padding: 28px;
   border-radius: 28px;
   text-align: center;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1080px) {
   .hero-grid,
   .editor-shell,
   .editor-main,
@@ -569,16 +634,43 @@ textarea {
     align-items: start;
     flex-direction: column;
   }
+
+  .editor-preview__canvas {
+    max-height: none;
+  }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 820px) {
+  .site-header,
+  .app-header,
+  .public-resume-page__meta,
+  .resume-card__footer,
+  .editor-panel__heading,
+  .editor-section__header,
+  .subsection__header,
+  .item-card__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .site-header .page-actions,
+  .app-header .page-actions,
+  .editor-toolbar__actions,
+  .editor-toolbar__secondary,
+  .resume-card__actions,
+  .auth-buttons {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
   .page-shell,
   .marketing-page,
   .app-shell,
   .public-resume-page,
   .templates-page,
   .login-page {
-    width: min(100% - 20px, 1200px);
+    width: min(100% - 24px, 1200px);
   }
 
   .field-grid {
@@ -586,17 +678,104 @@ textarea {
   }
 
   .mobile-only {
-    display: inline-flex;
+    display: block;
   }
 
-  .mobile-hidden {
+  .mobile-hidden,
+  .desktop-only {
     display: none;
+  }
+
+  .hero-card,
+  .feature-card,
+  .template-card,
+  .resume-card,
+  .login-card,
+  .notice-card,
+  .workspace-builder-strip,
+  .public-builder-hero,
+  .editor-nav,
+  .editor-toolbar,
+  .editor-panel,
+  .editor-preview,
+  .empty-state {
+    border-radius: 22px;
+    padding: 18px;
+  }
+
+  .page-actions > *,
+  .auth-buttons > *,
+  .resume-card__actions > *,
+  .editor-toolbar__actions > * {
+    width: 100%;
   }
 
   .editor-toolbar__primary,
   .editor-toolbar__actions,
+  .editor-toolbar__secondary,
+  .workspace-builder-strip__item,
   .resume-card__footer,
   .resume-card__actions {
     width: 100%;
+  }
+
+  .editor-toolbar__secondary .segmented-control {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .editor-toolbar__secondary .segmented-control button {
+    flex: 1 1 0;
+  }
+
+  .generated-output {
+    font-size: 0.88rem;
+    padding: 14px;
+  }
+
+  .resume-preview-frame {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-shell,
+  .marketing-page,
+  .app-shell,
+  .public-resume-page,
+  .templates-page,
+  .login-page {
+    width: min(100% - 16px, 1200px);
+  }
+
+  input,
+  textarea {
+    border-radius: 14px;
+    padding: 0.8rem 0.92rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.35rem, 14vw, 3.4rem);
+  }
+
+  .page-title {
+    font-size: clamp(1.9rem, 9vw, 2.6rem);
+  }
+
+  .hero-card,
+  .feature-card,
+  .template-card,
+  .resume-card,
+  .login-card,
+  .notice-card,
+  .workspace-builder-strip,
+  .public-builder-hero,
+  .editor-nav,
+  .editor-toolbar,
+  .editor-panel,
+  .editor-preview,
+  .empty-state {
+    border-radius: 18px;
+    padding: 16px;
   }
 }

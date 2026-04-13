@@ -18,8 +18,10 @@ import {
   type LinkedInProfileInputData,
   type PortfolioKitInputData,
 } from "@/lib/career-assets";
+import { cn } from "@/lib/utils";
 
 type PublicAssetType = Exclude<CareerAssetType, "RESUME">;
+type MobilePane = "edit" | "output";
 
 function textToList(value: string) {
   return value
@@ -73,6 +75,7 @@ export function PublicCareerBuilderShell<T extends PublicAssetType>({
   const [inputData, setInputData] = useState<CareerAssetInputDataMap[T]>(createEmptyInputData(assetType));
   const [outputData, setOutputData] = useState<CareerAssetOutputDataMap[T]>(createEmptyOutputData(assetType));
   const [statusMessage, setStatusMessage] = useState("Guest drafts stay in this browser.");
+  const [mobilePane, setMobilePane] = useState<MobilePane>("edit");
   const [busy, setBusy] = useState<"idle" | "saving" | "generating">("idle");
 
   useEffect(() => {
@@ -123,6 +126,7 @@ export function PublicCareerBuilderShell<T extends PublicAssetType>({
 
       setInputData(payload.inputData);
       setOutputData(payload.outputData);
+      setMobilePane("output");
       setStatusMessage("Generated and saved in local draft storage.");
     } finally {
       setBusy("idle");
@@ -188,10 +192,31 @@ export function PublicCareerBuilderShell<T extends PublicAssetType>({
           <Save size={14} />
           {statusMessage}
         </div>
+
+        <div className="editor-toolbar__secondary mobile-only">
+          <div className="segmented-control" role="tablist" aria-label="Builder panes">
+            <button
+              className={cn(mobilePane === "edit" && "is-active")}
+              onClick={() => setMobilePane("edit")}
+              role="tab"
+              type="button"
+            >
+              Edit
+            </button>
+            <button
+              className={cn(mobilePane === "output" && "is-active")}
+              onClick={() => setMobilePane("output")}
+              role="tab"
+              type="button"
+            >
+              Output
+            </button>
+          </div>
+        </div>
       </section>
 
       <div className="editor-main">
-        <section className="editor-panel surface-card">
+        <section className={cn("editor-panel surface-card", mobilePane !== "edit" && "mobile-hidden")}>
           {assetType === "GITHUB_README" ? (
             <GitHubReadmeFields value={inputData as GitHubReadmeInputData} onChange={(next) => setInputData(next as CareerAssetInputDataMap[T])} />
           ) : null}
@@ -203,7 +228,7 @@ export function PublicCareerBuilderShell<T extends PublicAssetType>({
           ) : null}
         </section>
 
-        <section className="editor-preview surface-card">
+        <section className={cn("editor-preview surface-card", mobilePane !== "output" && "mobile-hidden")}>
           {assetType === "GITHUB_README" ? <GitHubReadmeOutput outputData={outputData as CareerAssetOutputDataMap["GITHUB_README"]} /> : null}
           {assetType === "LINKEDIN_PROFILE" ? <LinkedInOutput outputData={outputData as CareerAssetOutputDataMap["LINKEDIN_PROFILE"]} /> : null}
           {assetType === "PORTFOLIO_KIT" ? <PortfolioOutput outputData={outputData as CareerAssetOutputDataMap["PORTFOLIO_KIT"]} /> : null}
@@ -441,7 +466,7 @@ function OutputSection({
     <div className="notice-card">
       <div className="subsection__header">
         <strong>{title}</strong>
-        <div className="page-actions">
+        <div className="page-actions output-actions">
           <button className="ghost-button" onClick={() => void copyText(value)} type="button">
             <Copy size={14} />
             Copy
@@ -454,7 +479,7 @@ function OutputSection({
           ) : null}
         </div>
       </div>
-      <pre className="generated-output">{value}</pre>
+      <pre className="generated-output" data-testid="generated-output">{value}</pre>
     </div>
   );
 }
