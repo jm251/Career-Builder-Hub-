@@ -57,9 +57,8 @@ export const resumeDocumentStyles = `
     margin: 0;
   }
   .resume-document__contacts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    display: grid;
+    gap: 6px;
     padding: 0;
     margin: 0;
     list-style: none;
@@ -96,11 +95,9 @@ export const resumeDocumentStyles = `
     gap: 8px;
   }
   .resume-document__entry-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 12px;
-    align-items: baseline;
+    display: grid;
+    gap: 4px;
+    justify-items: start;
   }
   .resume-document__entry-title {
     margin: 0;
@@ -110,7 +107,7 @@ export const resumeDocumentStyles = `
   .resume-document__entry-date {
     color: var(--resume-muted);
     font-size: 0.875rem;
-    white-space: nowrap;
+    white-space: normal;
   }
   .resume-document__entry-meta {
     color: var(--resume-muted);
@@ -137,10 +134,8 @@ export const resumeDocumentStyles = `
     gap: 12px;
   }
   .resume-document__skill-group {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: baseline;
+    display: grid;
+    gap: 4px;
   }
   .resume-document__skill-name {
     font-weight: 700;
@@ -174,11 +169,8 @@ export const resumeDocumentStyles = `
     font-family: "Space Grotesk", "Segoe UI", sans-serif;
   }
   .resume-document--creative .resume-document__header {
-    grid-template-columns: 1.4fr 0.9fr;
-    align-items: end;
-  }
-  .resume-document--creative .resume-document__contacts {
-    justify-content: flex-end;
+    grid-template-columns: 1fr;
+    align-items: start;
   }
   .resume-document--creative .resume-document__section {
     border-top: 0;
@@ -193,12 +185,6 @@ export const resumeDocumentStyles = `
   @media (max-width: 860px) {
     .resume-document__inner {
       padding: 28px;
-    }
-    .resume-document--creative .resume-document__header {
-      grid-template-columns: 1fr;
-    }
-    .resume-document--creative .resume-document__contacts {
-      justify-content: flex-start;
     }
   }
   @media (max-width: 540px) {
@@ -215,13 +201,6 @@ export const resumeDocumentStyles = `
     .resume-document__section {
       gap: 14px;
       padding-top: 16px;
-    }
-    .resume-document__entry-row {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .resume-document__entry-date {
-      white-space: normal;
     }
     .resume-document__summary {
       max-width: none;
